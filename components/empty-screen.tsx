@@ -6,38 +6,32 @@ import { IconArrowRight } from '@/components/ui/icons'
 
 const exampleMessages = [
   {
-    heading: 'Explain technical concepts',
-    message: `What is a "serverless function"?`
+    heading: 'كيف استخرج جواز سفر ؟',
+    message: `كيف استخرج جواز سفر ؟`
   },
   {
-    heading: 'Summarize an article',
-    message: 'Summarize the following article for a 2nd grader: \n'
+    heading: 'ما هي أفضل أماكن سياحية في الجزائر ؟',
+    message: `ما هي أفضل أماكن سياحية في الجزائر ؟`
   },
   {
-    heading: 'Draft an email',
-    message: `Draft an email to my boss about the following: \n`
+    heading: 'كيف أطلب يد عشيقتي ؟',
+    message: `كيف أطلب يد عشيقتي ؟`
   }
 ]
 
 export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
   return (
-    <div className="mx-auto max-w-2xl px-4">
+    <div className="mx-auto max-w-2xl px-4 text-right">
       <div className="rounded-lg border bg-background p-8">
         <h1 className="mb-2 text-lg font-semibold">
-          Welcome to Next.js AI Chatbot!
+          GPT-مرحبا بك في بوابة الدردشة مع كهل
         </h1>
         <p className="mb-2 leading-normal text-muted-foreground">
-          This is an open source AI chatbot app template built with{' '}
-          <ExternalLink href="https://nextjs.org">Next.js</ExternalLink> and{' '}
-          <ExternalLink href="https://vercel.com/storage/kv">
-            Vercel KV
-          </ExternalLink>
-          .
+          كهل جي-بي-تي مساعد إداري إلكتروني هدفه تفعيل الحافلة الرقمية و دفع
+          عجلة التنمية و صيانة سيرورة كاش حاجة
         </p>
-        <p className="leading-normal text-muted-foreground">
-          You can start a conversation here or try the following examples:
-        </p>
-        <div className="mt-4 flex flex-col items-start space-y-2">
+        <p className="leading-normal text-muted-foreground">سقسي واش حبيت</p>
+        <div className="mt-4 flex flex-col items-end space-y-2 text-right">
           {exampleMessages.map((message, index) => (
             <Button
               key={index}
@@ -45,8 +39,7 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
               className="h-auto p-0 text-base"
               onClick={() => setInput(message.message)}
             >
-              <IconArrowRight className="mr-2 text-muted-foreground" />
-              {message.heading}
+              <span className="mx-2">{message.heading}</span>•{' '}
             </Button>
           ))}
         </div>

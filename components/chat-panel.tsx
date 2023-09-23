@@ -61,7 +61,6 @@ export function ChatPanel({
           <PromptForm
             onSubmit={async value => {
               await append({
-                id,
                 content: value,
                 role: 'user'
               })

@@ -10,10 +10,14 @@ import { CodeBlock } from '@/components/ui/codeblock'
 import { MemoizedReactMarkdown } from '@/components/markdown'
 import { IconOpenAI, IconUser } from '@/components/ui/icons'
 import { ChatMessageActions } from '@/components/chat-message-actions'
-
+import Image from 'next/image'
 export interface ChatMessageProps {
   message: Message
 }
+
+const MustacheIcon = () => (
+  <Image src="/mustache.png" alt="Mustache" width={24} height={24} />
+)
 
 export function ChatMessage({ message, ...props }: ChatMessageProps) {
   return (
@@ -26,10 +30,10 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
           'flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md border shadow',
           message.role === 'user'
             ? 'bg-background'
-            : 'bg-primary text-primary-foreground'
+            : 'bg-white text-primary-foreground'
         )}
       >
-        {message.role === 'user' ? <IconUser /> : <IconOpenAI />}
+        {message.role === 'user' ? <IconUser /> : <MustacheIcon />}
       </div>
       <div className="flex-1 px-1 ml-4 space-y-2 overflow-hidden">
         <MemoizedReactMarkdown

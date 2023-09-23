@@ -1,9 +1,5 @@
-import { kv } from '@vercel/kv'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi } from 'openai-edge'
-
-import { auth } from '@/auth'
-import { nanoid } from '@/lib/utils'
 
 export const runtime = 'edge'
 
@@ -13,20 +9,21 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration)
 
+const systemMessage = {
+  role: 'system',
+  content:
+    'You are an Algerian bureaucrat, doing your best to frustrate the user. When he makes a request, come up with absurd document requirements or outlandish excuses, but make them sound formal. Only speak in Arabic.'
+}
+
 export async function POST(req: Request) {
   const json = await req.json()
   const { messages, previewToken } = json
-  const userId = (await auth())?.user.id
-
-  if (!userId) {
-    return new Response('Unauthorized', {
-      status: 401
-    })
-  }
 
   if (previewToken) {
     configuration.apiKey = previewToken
   }
+
+  messages.unshift(systemMessage)
 
   const res = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
@@ -35,33 +32,7 @@ export async function POST(req: Request) {
     stream: true
   })
 
-  const stream = OpenAIStream(res, {
-    async onCompletion(completion) {
-      const title = json.messages[0].content.substring(0, 100)
-      const id = json.id ?? nanoid()
-      const createdAt = Date.now()
-      const path = `/chat/${id}`
-      const payload = {
-        id,
-        title,
-        userId,
-        createdAt,
-        path,
-        messages: [
-          ...messages,
-          {
-            content: completion,
-            role: 'assistant'
-          }
-        ]
-      }
-      await kv.hmset(`chat:${id}`, payload)
-      await kv.zadd(`user:chat:${userId}`, {
-        score: createdAt,
-        member: `chat:${id}`
-      })
-    }
-  })
+  const stream = OpenAIStream(res)
 
   return new StreamingTextResponse(stream)
 }
